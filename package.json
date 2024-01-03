@@ -1,6 +1,6 @@
 {
   "name": "@nodebb/nodebb-widget-board-stats",
-  "version": "1.2.3",
+  "version": "2.0.0",
   "description": "Classic Board Stats Widget for NodeBB.",
   "main": "library.js",
   "scripts": {
@@ -32,8 +32,7 @@
   "nbbpm": {
     "compatibility": "^3.0.0"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "8.56.0",
     "eslint-config-nodebb": "0.2.1",

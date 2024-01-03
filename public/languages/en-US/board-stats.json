@@ -1,0 +1,10 @@
+{
+	"who-is-online": "Who's Online",
+	"full-list": "Full List",
+	"board-statistics": "Board Statistics",
+	"active-users-and-guests": "<span component=\"widget/board-stats/count\">%1</span> users active right now (<span component=\"widget/board-stats/members\">%2</span> members and <span component=\"widget/board-stats/guests\">%3</span> guests).",
+	"posts-and-topics-made": "Our members have made a total of <strong component=\"widget/board-stats/posts\">%1</strong> posts in <strong component=\"widget/board-stats/topics\">%2</strong> topics.",
+	"registered-members": "We currently have <strong component=\"widget/board-stats/registered\">%1</strong> members registered.",
+	"welcome-newest-member": "Please welcome our newest member, <span component=\"widget/board-stats/latest\"><a class=\"fw-bold\" href=\"%1\">%2</a></span>.",
+	"most-online-ever": "The most users online at one time was <strong>%1</strong> on %2."
+}

@@ -19,9 +19,7 @@
 		}
 	],
 	"templates": "./public/templates",
-	"less": [
-		"public/less/widget.less"
-	],
+	"languages": "./public/languages",
 	"scripts": [
 		"public/src/client.js"
 	]

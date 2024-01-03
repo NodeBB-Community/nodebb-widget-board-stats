@@ -1,16 +1,21 @@
-<div component="widget/board-stats" class="widget-board-stats">
-    <h3>Who's Online <a href="{config.relative_path}/users?section=online">[Full List]</a></h3>
-    <p>
-        <span component="widget/board-stats/count">{count}</span> users active right now (<span component="widget/board-stats/members">{members}</span> members and <span component="widget/board-stats/guests">{guests}</span> guests).<br />
+<div component="widget/board-stats" class="widget-board-stats border border-secondary">
+    <h3 class="text-bg-secondary py-2 px-3 fs-6 fw-bold mt-0">[[board-stats:who-is-online]] <a class="text-reset fw-normal" href="{config.relative_path}/users?section=online">&lsqb;[[board-stats:full-list]]&rsqb;</a></h3>
+    <p class="py-0 px-3">
+        [[board-stats:active-users-and-guests, {count}, {members}, {guests}]]
+        <br/>
         <span component="widget/board-stats/list">{list}</span>
     </p>
 
-    <h3>Board Statistics</h3>
-    <p>
-        Our members have made a total of <strong component="widget/board-stats/posts">{posts}</strong> posts in <strong component="widget/board-stats/topics">{topics}</strong> topics.<br />
-        We currently have <strong component="widget/board-stats/registered">{registered}</strong> members registered.<br />
-        Please welcome our newest member, <span component="widget/board-stats/latest">{latest}</span>.<br />
-
-        The most users online at one time was <strong>{mostUsers.total}</strong> on {mostUsers.date}.
+    <h3 class="text-bg-secondary py-2 px-3 fs-6 fw-bold mt-0">[[board-stats:board-statistics]]</h3>
+    <p class="py-0 px-3">
+        [[board-stats:posts-and-topics-made, {posts}, {topics}]]
+        <br />
+        [[board-stats:registered-members, {registered}]]
+        <br />
+        {{{ if latest }}}
+        [[board-stats:welcome-newest-member, {latest.userslug}, {latest.username}]]
+        <br />
+        {{{ end }}}
+        [[board-stats:most-online-ever, {mostUsers.total}, {mostUsers.date}]]
     </p>
 </div>

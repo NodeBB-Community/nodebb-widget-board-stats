@@ -1,17 +1,20 @@
 'use strict';
 
-const async = require('async');
-const nconf = module.parent.require('nconf');
+const nconf = require.main.require('nconf');
 
 const db = require.main.require('./src/database');
 const user = require.main.require('./src/user');
+const meta = require.main.require('./src/meta');
 const utils = require.main.require('./public/src/utils');
 
 const socketPlugins = require.main.require('./src/socket.io/plugins');
+const adminRooms = require.main.require('./src/socket.io/admin/rooms');
 
 let app;
 
 const Widget = module.exports;
+
+const relativePath = nconf.get('relative_path');
 
 Widget.init = function (params, callback) {
 	app = params.app;
@@ -19,153 +22,93 @@ Widget.init = function (params, callback) {
 };
 
 socketPlugins.boardStats = {};
-socketPlugins.boardStats.get = function (socket, tid, callback) {
-	getWidgetData(callback);
+socketPlugins.boardStats.get = async function (socket) {
+	return await getWidgetData(socket.uid);
 };
 
 
-function getWidgetData(callback) {
-	async.parallel({
-		global: function (next) {
-			db.getObjectFields('global', ['topicCount', 'postCount', 'userCount'], next);
+async function getWidgetData(uid) {
+	const [global, latestUser, activeUsers, onlineUsers] = await Promise.all([
+		db.getObjectFields('global', ['topicCount', 'postCount', 'userCount']),
+		getLatestUser(uid),
+		getActiveUsers(),
+		Widget.updateAndGetOnlineUsers(),
+	]);
+
+	return {
+		count: utils.makeNumberHumanReadable(onlineUsers.onlineCount + onlineUsers.guestCount),
+		members: utils.makeNumberHumanReadable(onlineUsers.onlineCount),
+		guests: utils.makeNumberHumanReadable(onlineUsers.guestCount),
+		list: joinUsers(activeUsers),
+		posts: utils.makeNumberHumanReadable(global.postCount ? global.postCount : 0),
+		topics: utils.makeNumberHumanReadable(global.topicCount ? global.topicCount : 0),
+		registered: utils.makeNumberHumanReadable(global.userCount ? global.userCount : 0),
+		latest: latestUser,
+		relative_path: nconf.get('relative_path'),
+		mostUsers: {
+			date: (new Date(parseInt(onlineUsers.timestamp, 10))).toDateString(),
+			total: onlineUsers.total,
 		},
-		latestUser: getLatestUser,
-		activeUsers: getActiveUsers,
-		onlineUsers: Widget.updateAndGetOnlineUsers,
-	}, function (err, results) {
-		if (err) {
-			return callback(err);
-		}
-
-		var data = {
-			count: utils.makeNumberHumanReadable(results.onlineUsers.onlineCount + results.onlineUsers.guestCount),
-			members: utils.makeNumberHumanReadable(results.onlineUsers.onlineCount),
-			guests: utils.makeNumberHumanReadable(results.onlineUsers.guestCount),
-			list: joinUsers(results.activeUsers),
-			posts: utils.makeNumberHumanReadable(results.global.postCount ? results.global.postCount : 0),
-			topics: utils.makeNumberHumanReadable(results.global.topicCount ? results.global.topicCount : 0),
-			registered: utils.makeNumberHumanReadable(results.global.userCount ? results.global.userCount : 0),
-			latest: joinUsers(results.latestUser),
-			relative_path: nconf.get('relative_path'),
-			mostUsers: {
-				date: (new Date(parseInt(results.onlineUsers.timestamp, 10))).toDateString(),
-				total: results.onlineUsers.total,
-			},
-		};
-
-
-		callback(null, data);
-	});
+	};
 }
 
-function getActiveUsers(callback) {
-	async.waterfall([
-		function (next) {
-			user.getUidsFromSet('users:online', 0, 19, next);
-		},
-		function (uids, next) {
-			user.getUsersFields(uids, ['username', 'userslug', 'status'], next);
-		},
-	], function (err, data) {
-		if (err) {
-			return callback(err);
-		}
-
-		data = data.filter(function (a) { return a.status === 'online'; });
-		callback(err, data);
-	});
+async function getActiveUsers() {
+	const uids = await user.getUidsFromSet('users:online', 0, 19);
+	const userData = await user.getUsersFields(uids, ['username', 'userslug', 'status']);
+	return userData.filter(user => user.status === 'online');
 }
 
-function getLatestUser(callback) {
-	async.waterfall([
-		function (next) {
-			user.getUidsFromSet('users:joindate', 0, 0, next);
-		},
-		function (uids, next) {
-			user.getUsersWithFields(uids, ['username', 'userslug'], 0, next);
-		},
-	], callback);
+async function getLatestUser(uid) {
+	const uids = await user.getUidsFromSet('users:joindate', 0, 0);
+	const userData = await user.getUsersWithFields(uids, ['username', 'userslug'], uid);
+	return userData.length ? userData[0] : null;
 }
 
 function joinUsers(usersData) {
-	var str = [];
-	for (var i = 0, ii = usersData.length; i < ii; i++) {
-		str.push('<a href="' + nconf.get('relative_path') + '/user/' + usersData[i].userslug + '">' + usersData[i].username + '</a>');
-	}
-
-	return str.join(', ');
+	return usersData
+		.map(user => `<a class="fw-bold" href="${relativePath}/user/${user.userslug}">${user.username}</a>`)
+		.join(', ');
 }
 
-Widget.updateAndGetOnlineUsers = function (callback) {
-	callback = typeof callback === 'function' ? callback : function () {};
+Widget.updateAndGetOnlineUsers = async function () {
+	const now = Date.now();
+	const [onlineUserCount, onlineGuestCount, widgetData] = await Promise.all([
+		db.sortedSetCount('users:online', now - (meta.config.onlineCutoff * 60000), '+inf'),
+		adminRooms.getTotalGuestCount(),
+		db.getObjectFields('plugin:widget-board-stats', ['total', 'timestamp']),
+	]);
 
-	async.waterfall([
-		function (next) {
-			var now = Date.now();
-			db.sortedSetCount('users:online', now - 300000, '+inf', next);
-		},
-		function (onlineCount, next) {
-			require.main.require('./src/socket.io/admin/rooms').getTotalGuestCount(function (err, guestCount) {
-				if (err) {
-					return next(err);
-				}
+	const totalUsers = onlineUserCount + onlineGuestCount;
+	widgetData.timestamp = widgetData.timestamp || Date.now();
 
-				next(null, {
-					onlineCount: parseInt(onlineCount, 10),
-					guestCount: parseInt(guestCount, 10),
-				});
-			});
-		},
-		function (users, next) {
-			db.getObjectFields('plugin:widget-board-stats', ['total', 'timestamp'], function (err, data) {
-				if (err) {
-					return next(err);
-				}
+	if (parseInt(widgetData.total || 0, 10) <= totalUsers) {
+		widgetData.timestamp = Date.now();
+		widgetData.total = totalUsers;
+		await db.setObject('plugin:widget-board-stats', widgetData);
+	}
 
-				var totalUsers = users.onlineCount + users.guestCount;
-				data.timestamp = data.timestamp || Date.now();
-
-				if (parseInt(data.total || 0, 10) <= totalUsers) {
-					data.timestamp = Date.now();
-					data.total = totalUsers;
-					db.setObject('plugin:widget-board-stats', data);
-				}
-
-				data.onlineCount = users.onlineCount;
-				data.guestCount = users.guestCount;
-				return next(null, data);
-			});
-		},
-	], callback);
+	widgetData.onlineCount = onlineUserCount;
+	widgetData.guestCount = onlineGuestCount;
+	return widgetData;
 };
 
-Widget.renderWidget = function (widget, callback) {
-	getWidgetData(function (err, data) {
-		if (err) {
-			return callback(err);
-		}
-
-		app.render('widgets/board-stats', data, function (err, html) {
-			if (err) {
-				return callback(err);
-			}
-			widget.html = html;
-			callback(null, widget);
-		});
-	});
+Widget.renderWidget = async function (widget) {
+	const data = await getWidgetData();
+	const html = await app.renderAsync('widgets/board-stats', data);
+	widget.html = html;
+	return widget;
 };
 
-Widget.defineWidgets = function (widgets, callback) {
-	var widget = {
+Widget.defineWidgets = async function (widgets) {
+	const widget = {
 		widget: 'board-stats',
 		name: 'Board Stats',
 		description: 'Classical board stats widget in real-time.',
 		content: 'admin/board-stats',
 	};
 
-	app.render(widget.content, {}, function (err, html) {
-		widget.content = html;
-		widgets.push(widget);
-		callback(err, widgets);
-	});
+	const html = await app.renderAsync(widget.content, {});
+	widget.content = html;
+	widgets.push(widget);
+	return widgets;
 };

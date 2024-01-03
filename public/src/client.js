@@ -1,13 +1,11 @@
 'use strict';
 
-/* globals document, window, app, socket */
-
 $(document).ready(function () {
 	var intervalId = 0;
 
 	var pollInProgress = false;
 
-	$(window).on('action:ajaxify.end', function (ev, data) {
+	$(window).on('action:ajaxify.end', function () {
 		if ($('[component="widget/board-stats"]').length) {
 			startPolling();
 		} else {

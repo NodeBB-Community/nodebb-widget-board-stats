@@ -1,5 +1,5 @@
 {
-  "name": "nodebb-widget-board-stats",
+  "name": "@nodebb/nodebb-widget-board-stats",
   "version": "1.2.3",
   "description": "Classic Board Stats Widget for NodeBB.",
   "main": "library.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/psychobunny/nodebb-widget-board-stats"
+    "url": "https://github.com/NodeBB-Community/nodebb-widget-board-stats"
   },
   "keywords": [
     "nodebb",
@@ -17,22 +17,26 @@
     "stats",
     "statistics"
   ],
-  "author": {
-    "name": "psychobunny",
-    "email": "psycho.bunny@hotmail.com"
-  },
+  "maintainers": [
+    {
+      "name": "Barış Soner Uşaklı",
+      "email": "baris@nodebb.org",
+      "url": "https://github.com/barisusakli"
+    }
+  ],
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/psychobunny/nodebb-widget-board-stats/issues"
+    "url": "https://github.com/NodeBB-Community/nodebb-widget-board-stats/issues"
   },
-  "readme": "",
   "readmeFilename": "README.md",
-  "_id": "nodebb-widget-board-stats@0.0.1",
-  "_from": "nodebb-widget-board-stats@~0.0.1",
   "nbbpm": {
-    "compatibility": "^1.12.0"
+    "compatibility": "^3.0.0"
   },
   "dependencies": {
-    "async": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "8.56.0",
+    "eslint-config-nodebb": "0.2.1",
+    "eslint-plugin-import": "2.29.1"
   }
 }

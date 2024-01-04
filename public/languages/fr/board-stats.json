@@ -6,5 +6,5 @@
 	"posts-and-topics-made": "Nos membres ont publié un total de <strong component=\"widget/board-stats/posts\">%1</strong> messages dans <strong component=\"widget/ board-stats/topics\">%2</strong> sujets.",
 	"registered-members": "Nous avons actuellement <strong component=\"widget/board-stats/registered\">%1</strong> membres enregistrés.",
 	"welcome-newest-member": "Veuillez souhaiter la bienvenue à notre nouveau membre, <span component=\"widget/board-stats/latest\"><a class=\"fw-bold\" href=\"%1\" >%2</a></span>.",
-	"most-online-ever": "Le plus grand nombre d'utilisateurs en ligne à la fois était de <strong>%1</strong> sur %2."
+	"most-online-ever": "Le plus grand nombre d'utilisateurs en ligne simultané était de <strong>%1</strong>, le %2."
 }

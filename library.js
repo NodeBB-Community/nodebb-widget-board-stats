@@ -38,9 +38,9 @@ async function getWidgetData(uid) {
 
 
 	const dateStr = (new Date(parseInt(onlineUsers.timestamp, 10))).toLocaleDateString(settings.userLang, {
-		weekday: 'short',
+		weekday: 'long',
 		year: 'numeric',
-		month: 'short',
+		month: 'long',
 		day: 'numeric',
 	});
 

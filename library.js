@@ -5,7 +5,8 @@ const nconf = require.main.require('nconf');
 const db = require.main.require('./src/database');
 const user = require.main.require('./src/user');
 const meta = require.main.require('./src/meta');
-const utils = require.main.require('./public/src/utils');
+const utils = require.main.require('./src/utils');
+const translator = require.main.require('./src/translator');
 
 const socketPlugins = require.main.require('./src/socket.io/plugins');
 const adminRooms = require.main.require('./src/socket.io/admin/rooms');
@@ -28,12 +29,21 @@ socketPlugins.boardStats.get = async function (socket) {
 
 
 async function getWidgetData(uid) {
-	const [global, latestUser, activeUsers, onlineUsers] = await Promise.all([
+	const [global, latestUser, activeUsers, onlineUsers, settings] = await Promise.all([
 		db.getObjectFields('global', ['topicCount', 'postCount', 'userCount']),
 		getLatestUser(uid),
 		getActiveUsers(),
 		Widget.updateAndGetOnlineUsers(),
+		user.getSettings(uid),
 	]);
+
+
+	const dateStr = (new Date(parseInt(onlineUsers.timestamp, 10))).toLocaleDateString(settings.userLang, {
+		weekday: 'short',
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+	});
 
 	return {
 		count: utils.makeNumberHumanReadable(onlineUsers.onlineCount + onlineUsers.guestCount),
@@ -46,7 +56,7 @@ async function getWidgetData(uid) {
 		latest: latestUser,
 		relative_path: nconf.get('relative_path'),
 		mostUsers: {
-			date: (new Date(parseInt(onlineUsers.timestamp, 10))).toDateString(),
+			date: dateStr.replace(/,/g, '&#44;'),
 			total: onlineUsers.total,
 		},
 	};
@@ -93,7 +103,7 @@ Widget.updateAndGetOnlineUsers = async function () {
 };
 
 Widget.renderWidget = async function (widget) {
-	const data = await getWidgetData();
+	const data = await getWidgetData(widget.uid);
 	const html = await app.renderAsync('widgets/board-stats', data);
 	widget.html = html;
 	return widget;

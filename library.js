@@ -6,7 +6,6 @@ const db = require.main.require('./src/database');
 const user = require.main.require('./src/user');
 const meta = require.main.require('./src/meta');
 const utils = require.main.require('./src/utils');
-const translator = require.main.require('./src/translator');
 
 const socketPlugins = require.main.require('./src/socket.io/plugins');
 const adminRooms = require.main.require('./src/socket.io/admin/rooms');

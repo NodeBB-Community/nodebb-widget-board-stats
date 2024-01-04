@@ -64,7 +64,7 @@ async function getWidgetData(uid) {
 async function getActiveUsers() {
 	const uids = await user.getUidsFromSet('users:online', 0, 19);
 	const userData = await user.getUsersFields(uids, ['username', 'userslug', 'status']);
-	return userData.filter(user => user.status === 'online');
+	return userData.filter(user => user && user.status !== 'offline');
 }
 
 async function getLatestUser(uid) {

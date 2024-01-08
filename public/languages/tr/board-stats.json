@@ -1,13 +1,12 @@
 {
-	"who-is-online": "Kim çevrimiçi",
+	"who-is-online": "Kimler Çevrimiçi",
 	"full-list": "Tam liste",
 	"board-statistics": "Forum İstatistikleri",
 	"active-users-and-guests": "Şu anda <span component=\"widget/board-stats/count\" class=\"fw-bold\">%1</span> aktif kullanıcı var (<span component=\"widget/board-stats/members\" class=\"fw-bold\">%2</span> üye ve <span component=\"widget/board-stats/guests\" class=\"fw-bold\">%3</span> misafir).",
-	"posts-and-topics-made": "Üyelerimiz <strong component=\"widget/board-stats/topics\">%2</strong> konuda toplam <strong component=\"widget/board-stats/posts\">%1</strong> gönderi yazdı.",
-	"registered-members": "Şu anda <strong component=\"widget/board-stats/registered\">%1</strong> üye kayıtlı.",
-	"welcome-newest-member": "Lütfen yeni üyemize merhaba deyin, <span component=\"widget/board-stats/latest\"><a class=\"fw-bold\" href=\"%1\">%2</a></span>",
-
-	"most-online-ever": "Bir seferde çevrimiçi en fazla kullanıcı sayısı <strong>%1</strong>, %2 tarihindeydi."
+	"posts-and-topics-made": "Üyelerimiz <strong component=\"widget/board-stats/topics\">%2</strong> konuda toplam <strong component=\"widget/board-stats/posts\">%1</strong> ileti yazdı.",
+	"registered-members": "Şu an itibariyle kayıtlı <strong component=\"widget/board-stats/registered\">%1</strong> üyemiz bulunmaktadır.",
+	"welcome-newest-member": "Aramızda görmekten mutluluk duyduğumuz en yeni üyemiz, <span component=\"widget/board-stats/latest\"><a class=\"fw-bold\" href=\"%1\">%2</a></span>.",
+	"most-online-ever": "Tek seferde en fazla çevrimiçi kullanıcı sayısı %2 günü, <strong>%1</strong> kişiydi."
 }
 
 

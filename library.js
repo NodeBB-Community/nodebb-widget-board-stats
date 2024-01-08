@@ -22,27 +22,31 @@ Widget.init = function (params, callback) {
 };
 
 socketPlugins.boardStats = {};
-socketPlugins.boardStats.get = async function (socket) {
-	return await getWidgetData(socket.uid);
+socketPlugins.boardStats.get = async function (socket, { userLang }) {
+	return await getWidgetData(socket.uid, userLang);
 };
 
+async function getUserLang(uid) {
+	const settings = await user.getSettings(uid);
+	return settings.userLang;
+}
 
-async function getWidgetData(uid) {
-	const [global, latestUser, activeUsers, onlineUsers, settings] = await Promise.all([
+async function getWidgetData(uid, userLang) {
+	const [global, latestUser, activeUsers, onlineUsers] = await Promise.all([
 		db.getObjectFields('global', ['topicCount', 'postCount', 'userCount']),
 		getLatestUser(uid),
 		getActiveUsers(),
 		Widget.updateAndGetOnlineUsers(),
-		user.getSettings(uid),
 	]);
 
 
-	const dateStr = (new Date(parseInt(onlineUsers.timestamp, 10))).toLocaleDateString(settings.userLang, {
-		weekday: 'long',
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-	});
+	const dateStr = (new Date(parseInt(onlineUsers.timestamp, 10)))
+		.toLocaleDateString(userLang, {
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+		});
 
 	return {
 		count: utils.makeNumberHumanReadable(onlineUsers.onlineCount + onlineUsers.guestCount),
@@ -102,7 +106,8 @@ Widget.updateAndGetOnlineUsers = async function () {
 };
 
 Widget.renderWidget = async function (widget) {
-	const data = await getWidgetData(widget.uid);
+	const lang = widget.req.query.lang || await getUserLang(widget.uid);
+	const data = await getWidgetData(widget.uid, lang);
 	const html = await app.renderAsync('widgets/board-stats', data);
 	widget.html = html;
 	return widget;

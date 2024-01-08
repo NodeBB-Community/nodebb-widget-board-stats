@@ -23,9 +23,13 @@ $(document).ready(function () {
 				return;
 			}
 			pollInProgress = true;
-			socket.emit('plugins.boardStats.get', {}, function (err, data) {
+
+			socket.emit('plugins.boardStats.get', {
+				userLang: config.userLang,
+			}, async function (err, data) {
 				if (err) {
-					return app.alertError(err.message);
+					const alerts = await app.require('alerts');
+					return alerts.error(err.message);
 				}
 				if (!data) {
 					pollInProgress = false;

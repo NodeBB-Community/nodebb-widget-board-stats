@@ -13,7 +13,7 @@
         [[board-stats:registered-members, {registered}]]
         <br />
         {{{ if latest }}}
-        [[board-stats:welcome-newest-member, {latest.userslug}, {latest.username}]]
+        [[board-stats:welcome-newest-member, {config.relative_path}/user/{latest.userslug}, {latest.username}]]
         <br />
         {{{ end }}}
         [[board-stats:most-online-ever, {mostUsers.total}, {mostUsers.date}]]

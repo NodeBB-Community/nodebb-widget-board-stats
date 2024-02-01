@@ -1,8 +1,8 @@
 {
-	"who-is-online": "Qui est en ligne",
+	"who-is-online": "Utilisateurs en ligne",
 	"full-list": "Liste complète",
 	"board-statistics": "Statistiques du forum",
-	"active-users-and-guests": "<span Component=\"widget/board-stats/count\" class=\"fw-bold\">%1</span> utilisateurs actifs en ce moment (<span Component=\"widget/board-stats/ membres\" class=\"fw-bold\">%2</span> membres et <span component=\"widget/board-stats/guests\" class=\"fw-bold\">%3</span> invités).",
+	"active-users-and-guests": "<span Component=\"widget/board-stats/count\">%1</span> utilisateurs actifs en ce moment (<span Component=\"widget/board-stats/ membres\">%2</span> membres et <span component=\"widget/board-stats/guests\">%3</span> invités).",
 	"posts-and-topics-made": "Nos membres ont publié un total de <strong component=\"widget/board-stats/posts\">%1</strong> messages dans <strong component=\"widget/ board-stats/topics\">%2</strong> sujets.",
 	"registered-members": "Nous avons actuellement <strong component=\"widget/board-stats/registered\">%1</strong> membres enregistrés.",
 	"welcome-newest-member": "Veuillez souhaiter la bienvenue à notre nouveau membre, <span component=\"widget/board-stats/latest\"><a class=\"fw-bold\" href=\"%1\" >%2</a></span>.",

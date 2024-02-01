@@ -1,6 +1,6 @@
 {
   "name": "@nodebb/nodebb-widget-board-stats",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Classic Board Stats Widget for NodeBB.",
   "main": "library.js",
   "scripts": {

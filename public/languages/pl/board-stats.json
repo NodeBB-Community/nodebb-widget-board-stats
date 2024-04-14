@@ -1,0 +1,11 @@
+
+{
+	"who-is-online": "Teraz na forum",
+	"full-list": "Pełna lista",
+	"board-statistics": "Statystyki forum",
+	"active-users-and-guests": "<span component=\"widget/board-stats/count\" class=\"fw-bold\">%1</span> aktywnych użytkowników (<span component=\"widget/board-stats/members\" class=\"fw-bold\">%2</span> zarejestrowanych i <span component=\"widget/board-stats/guests\" class=\"fw-bold\">%3</span> gości).",
+	"posts-and-topics-made": "Nasi dyskutanci popełnili w sumie <strong component=\"widget/board-stats/posts\">%1</strong> wpisów w <strong component=\"widget/board-stats/topics\">%2</strong> wątkach.",
+	"registered-members": "Obecnie mamy <strong component=\"widget/board-stats/registered\">%1</strong> użytkowników.",
+	"welcome-newest-member": "Ostatnio pozyskany użytkownik to <span component=\"widget/board-stats/latest\"><a class=\"fw-bold\" href=\"%1\">%2</a></span>.",
+	"most-online-ever": "Rekord aktywności to <strong>%1</strong> i padł %2."
+}

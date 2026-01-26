@@ -1,0 +1,11 @@
+{
+        "who-is-online": "Derzeit online:",
+        "full-list": "komplette Liste",
+        "board-statistics": "Forum-Statistik",
+        "active-users-and-guests": "Aktuell sind <span component=\"widget/board-stats/count\" class=\"fw-bold\">%1</span> Nutzende aktiv (davon sind <span component=\"widget/board-stats/members\" class=\"fw-bold\">%2</span> registriert und <span component=\"widget/board-stats/guests\" class=\"fw-bold\">%3</span> zu Gast).",
+        "posts-and-topics-made": "Die registrierten Mitglieder des Forums haben <strong component=\"widget/board-stats/posts\">%1</strong> Beiträge zu <strong component=\"widget/board-stats/topics\">%2</strong> Themen verfasst.",
+        "registered-members": "<strong component=\"widget/board-stats/registered\">%1</strong> Mitglieder sind bei <em>schoenen-dunk.de</em> registriert.",
+        "welcome-newest-member": "Lasst uns unser neuestes Mitglied, <span component=\"widget/board-stats/latest\"><a class=\"fw-bold\" href=\"%1\">%2</a></span>, begr&uuml;&szlig;en!",
+        "most-online-ever": "Am %2, waren <strong>%1</strong> Nutzende gleichzeitig online."
+}
+~       

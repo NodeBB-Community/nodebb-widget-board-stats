@@ -1,14 +1,15 @@
 'use strict';
 
-const nconf = require.main.require('nconf');
+const nconf = nodebb.require('nconf');
 
-const db = require.main.require('./src/database');
-const user = require.main.require('./src/user');
-const meta = require.main.require('./src/meta');
-const utils = require.main.require('./src/utils');
+const db = nodebb.require('./src/database');
+const user = nodebb.require('./src/user');
+const meta = nodebb.require('./src/meta');
+const utils = nodebb.require('./src/utils');
+const helpers = nodebb.require('./src/helpers');
 
-const socketPlugins = require.main.require('./src/socket.io/plugins');
-const adminRooms = require.main.require('./src/socket.io/admin/rooms');
+const socketPlugins = nodebb.require('./src/socket.io/plugins');
+const adminRooms = nodebb.require('./src/socket.io/admin/rooms');
 
 let app;
 
@@ -59,7 +60,7 @@ async function getWidgetData(uid, userLang) {
 		latest: latestUser,
 		relative_path: nconf.get('relative_path'),
 		mostUsers: {
-			date: dateStr.replace(/,/g, '&#44;'),
+			date: dateStr,
 			total: onlineUsers.total,
 		},
 	};
@@ -79,7 +80,7 @@ async function getLatestUser(uid) {
 
 function joinUsers(usersData) {
 	return usersData
-		.map(user => `<a class="fw-bold" href="${relativePath}/user/${user.userslug}">${user.username}</a>`)
+		.map(user => `<a class="fw-bold" href="${relativePath}/user/${helpers.escape(user.userslug)}">${helpers.escape(user.username)}</a>`)
 		.join(', ');
 }
 

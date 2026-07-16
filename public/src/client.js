@@ -1,9 +1,9 @@
 'use strict';
 
 $(document).ready(function () {
-	var intervalId = 0;
+	let intervalId = 0;
 
-	var pollInProgress = false;
+	let pollInProgress = false;
 
 	$(window).on('action:ajaxify.end', function () {
 		if ($('[component="widget/board-stats"]').length) {
@@ -37,7 +37,7 @@ $(document).ready(function () {
 				}
 
 				app.parseAndTranslate('widgets/board-stats', data, function (html) {
-					var div = $('[component="widget/board-stats"]');
+					const div = $('[component="widget/board-stats"]');
 					div.html(html.html());
 					pollInProgress = false;
 				});
